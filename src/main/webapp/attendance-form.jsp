@@ -140,7 +140,7 @@ p {
 				</fieldset>
 				
 <hr>
-				<button type="submit" class="btn btn-success">Save</button>
+				<button type="submit" id="action" class="btn btn-success">Save</button>
 				</form>
 			</div>
 		</div>
@@ -148,10 +148,55 @@ p {
 	<script type="text/javascript">
 
 	$(document).ready(function(){
+		$("#staffId").focus()
+
+        $("#action").attr("disabled", true);
 		
 	});
-	
 
+	$("#staffId").blur(function(e) {
+		
+		if($("#staffId").val().length==5 && $("#attendedDate").val()!=""){
+		    $("#action").attr("disabled", false);
+		
+		}else{        $("#action").attr("disabled", true);
+		
+			
+		}
+		
+		  if($("#staffId").val()==""){
+			    $('#msg1').text('Please fill this')
+			    $("#msg1").css({"color": "red"});
+			}else if($("#staffId").val().length!==5){
+			    $('#msg1').text('Please enter valid Member ID')
+			    $("#msg1").css({"color": "red"});
+			}else{
+			    $('#msg1').text('')
+				
+			}
+		
+	})
+	$("#attendedDate").blur(function(e) {
+		
+		if($("#staffId").val().length==5 && $("#attendedDate").val()!=""){
+		    $("#action").attr("disabled", false);
+
+		}else{        $("#action").attr("disabled", true);
+
+			
+		}
+		
+		if($("#attendedDate").val()==""){
+		    $('#msg2').text('Please fill date')
+		    $("#msg2").css({"color": "red"});
+		    
+		    
+		}else{
+		    $('#msg2').text('')
+			
+		}
+		
+	})
 	  $(document).on('submit', '#formStaff', function(event){
 		  if($("#staffId").val()==""){
 			    event.preventDefault();
