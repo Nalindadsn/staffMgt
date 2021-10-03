@@ -114,7 +114,15 @@ p {
 
 
 				<fieldset class="form-group">
-					<label>Date<span class="badge bg-primary">Old : ${user.attendedDate}</span> </label>
+					<label>Date
+					
+				<c:if test="${user != null}"> 
+					<span class="badge bg-primary">Old : ${user.attendedDate}</span> 
+
+
+				</c:if>
+					
+					</label>
 						
 						
 						
