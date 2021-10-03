@@ -9,7 +9,6 @@
 <title>Insert title here</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
 <style type="text/css">
 body {
 margin:0;
@@ -80,6 +79,7 @@ a:hover{
 color:orange;
 }
 </style>
+
 </head>
 <body>
 	<header>
@@ -100,8 +100,8 @@ color:orange;
 
 		<div class="container">
 			<div class="">
-				<h5 class="float-start">Date: <a class="btn btn-primary"><c:out value="${param['date']}"></c:out></a> </h5><br><br>
-				<h5 class="float-start">No of staff members: ${listUser1.size()}</h5><br><br>
+				<h5 class="float-start">Member Id: <a class="btn btn-primary"><c:out value="${param['uid']}"></c:out></a> </h5><br><br>
+				<h5 class="float-start">No of staff members: ${listUser2.size()}</h5><br><br>
 			<h3 class="float-start">Attendance</h3>
 				<a href="<%=request.getContextPath()%>/new" class="btn btn-success float-end">Add
 					New </a>
@@ -111,7 +111,6 @@ color:orange;
 				<thead>
 					<tr>
 						<th>ID</th>
-						<th>Staff Id</th>
 						<th>Attened date</th>
 						<th>Created at</th>
 						<th>Note</th>
@@ -119,12 +118,11 @@ color:orange;
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="user" items="${listUser1}">
+					<c:forEach var="user" items="${listUser2}">
 					
 
 						<tr>
 							<td><c:out value="${user.id}" /></td>
-							<td><c:out value="${user.staffId}" /></td>
 							<td><c:out value="${user.attendedDate}" /></td>
 							<td><c:out value="${user.created_at}" /></td>
 							<td><c:out value="${user.note}" /></td>

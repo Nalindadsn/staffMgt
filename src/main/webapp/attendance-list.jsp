@@ -8,6 +8,8 @@
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <style type="text/css">
 body {
 margin:0;
@@ -69,6 +71,14 @@ thead{
 
   background-color: rgba(0,0,0,.5);
 }
+a{
+text-decoration:none;
+color:#fff;
+}
+a:hover{
+
+color:orange;
+}
 </style>
 </head>
 <body>
@@ -76,6 +86,10 @@ thead{
 <nav class="navbar navbar-light bg-light">
   <div class="container-fluid">
     <a href="<%=request.getContextPath()%>/list"  class="navbar-brand">Staff Management System</a>
+    <form class="d-flex" method="get" action="<%=request.getContextPath()%>/user?uid=">
+      <input class="form-control me-2" type="search" placeholder="Member ID" aria-label="Search" name="uid">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
     <form class="d-flex" method="get" action="<%=request.getContextPath()%>/attendance?date=">
       <input class="form-control me-2" type="date" placeholder="Search" aria-label="Search" name="date">
       <button class="btn btn-outline-success" type="submit">Search</button>
@@ -90,7 +104,7 @@ thead{
 
 		<div class="container">
 			<div class="">
-				<h5 class="float-start">No of staff members: ${listUser.size()}</h5><br><br>
+				<h5 class="float-start">No of Records : ${listUser.size()}</h5><br><br>
 			<h3 class="float-start">Attendance</h3>
 				<a href="<%=request.getContextPath()%>/new" class="btn btn-success float-end">Add
 					New </a>
@@ -113,13 +127,13 @@ thead{
 
 						<tr>
 							<td><c:out value="${user.id}" /></td>
-							<td><c:out value="${user.name}" /></td>
-							<td><c:out value="${user.attendedDate}" /></td>
+							<td><a href="<%=request.getContextPath()%>/user?uid=${user.staffId}"><c:out value="${user.staffId}" /></a></td>
+							<td><a href="<%=request.getContextPath()%>/attendance?date=${user.attendedDate}"><c:out value="${user.attendedDate}" /></a> </td>
 							<td><c:out value="${user.created_at}" /></td>
 							<td><c:out value="${user.note}" /></td>
-							<td><a href="edit?id=<c:out value='${user.id}' />">Edit</a>
+							<td><a href="edit?id=<c:out value='${user.id}' />"><i class="fa fa-edit text-warning"></i> Edit</a>
 								&nbsp;&nbsp;&nbsp;&nbsp; <a
-								href="delete?id=<c:out value='${user.id}' />">Delete</a></td>
+								href="delete?id=<c:out value='${user.id}' />"><i class="fa fa-trash text-danger"></i> Delete</a></td>
 						</tr>
 					</c:forEach>
 		

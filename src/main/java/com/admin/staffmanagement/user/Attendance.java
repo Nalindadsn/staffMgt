@@ -1,34 +1,34 @@
 package com.admin.staffmanagement.user;
 
-public class User {
+public class Attendance {
 	private int id;
-	private String name;
+	private String staffId;
 	private String note;
 	private String attendedDate;
 	private String created_at;
 	
 
-	public User(int id, String name, String note, String attendedDate, String created_at) {
+	public Attendance(int id, String staffId, String note, String attendedDate, String created_at) {
 		super();
 		this.id = id;
-		this.name = name;
+		this.staffId = staffId;
 		this.note = note;
 		this.attendedDate = attendedDate;
 		this.created_at = created_at;
 	}
 
-	public User(int id, String name, String note, String attendedDate) {
+	public Attendance(int id, String staffId, String note, String attendedDate) {
 		super();
 		this.id = id;
-		this.name = name;
+		this.staffId = staffId;
 		this.note = note;
 		this.attendedDate = attendedDate;
 	}
 	
 	
-	public User(String name, String note, String attendedDate) {
+	public Attendance(String staffId, String note, String attendedDate) {
 		super();
-		this.name = name;
+		this.staffId = staffId;
 		this.note = note;
 		this.attendedDate = attendedDate;
 	}
@@ -49,11 +49,11 @@ public class User {
 	public void setCreated_at(String created_at) {
 		this.created_at = created_at;
 	}
-	public String getName() {
-		return name;
+	public String getStaffId() {
+		return staffId;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setStaffId(String staffId) {
+		this.staffId = staffId;
 	}
 	
 	

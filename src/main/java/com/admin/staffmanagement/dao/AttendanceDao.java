@@ -8,25 +8,25 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.admin.staffmanagement.user.User;
+import com.admin.staffmanagement.user.Attendance;
 
 
 
-public class UserDao {
+public class AttendanceDao {
 	private String jdbcURL = "jdbc:mysql://localhost:3306/userdb?useSSL=false";
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "";
 
-	private static final String INSERT_USERS_SQL = "INSERT INTO attendance" + "  (name, note, attendedDate) VALUES "
+	private static final String INSERT_USERS_SQL = "INSERT INTO attendance" + "  (staffId, note, attendedDate) VALUES "
 			+ " (?, ?, ?);";
 
-	private static final String SELECT_USER_BY_ID = "select id,name,note,attendedDate from attendance where id =?";
+	private static final String SELECT_USER_BY_ID = "select id,staffId,note,attendedDate from attendance where id =?";
 	private static final String SELECT_ALL_USERS = "select * from attendance";
 	private static final String DELETE_USERS_SQL = "delete from attendance where id = ?;";
-	private static final String UPDATE_USERS_SQL = "update attendance set name = ?,note= ?, attendedDate =? where id = ?;";
+	private static final String UPDATE_USERS_SQL = "update attendance set staffId = ?,note= ?, attendedDate =? where id = ?;";
 
 
-	public UserDao() {
+	public AttendanceDao() {
 	}
 
 	protected Connection getConnection() {
@@ -44,12 +44,12 @@ public class UserDao {
 		return connection;
 	}
 
-	public void insertUser(User user) throws SQLException {
+	public void insertUser(Attendance user) throws SQLException {
 		System.out.println(INSERT_USERS_SQL);
 		// try-with-resource statement will auto close the connection.
 		try (Connection connection = getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL)) {
-			preparedStatement.setString(1, user.getName());
+			preparedStatement.setString(1, user.getStaffId());
 			preparedStatement.setString(2, user.getNote());
 			preparedStatement.setString(3, user.getAttendedDate());
 			System.out.println(preparedStatement);
@@ -61,8 +61,8 @@ public class UserDao {
 
 
 	
-	public User selectUser(int id) {
-		User user = null;
+	public Attendance selectUser(int id) {
+		Attendance user = null;
 		// Step 1: Establishing a Connection
 		try (Connection connection = getConnection();
 				// Step 2:Create a statement using connection object
@@ -74,10 +74,10 @@ public class UserDao {
 
 			// Step 4: Process the ResultSet object.
 			while (rs.next()) {
-				String name = rs.getString("name");
+				String staffId = rs.getString("staffId");
 				String note = rs.getString("note");
 				String attendedDate = rs.getString("attendedDate");
-				user = new User(id, name, note, attendedDate);
+				user = new Attendance(id, staffId, note, attendedDate);
 			}
 		} catch (SQLException e) {
 			printSQLException(e);
@@ -85,10 +85,10 @@ public class UserDao {
 		return user;
 	}
 
-	public List<User> selectAllUsers() {
+	public List<Attendance> selectAllUsers() {
 
 		// using try-with-resources to avoid closing resources (boiler plate code)
-		List<User> users = new ArrayList<>();
+		List<Attendance> users = new ArrayList<>();
 		// Step 1: Establishing a Connection
 		try (Connection connection = getConnection();
 
@@ -101,11 +101,11 @@ public class UserDao {
 			// Step 4: Process the ResultSet object.
 			while (rs.next()) {
 				int id = rs.getInt("id");
-				String name = rs.getString("name");
+				String staffId = rs.getString("staffId");
 				String note = rs.getString("note");
 				String attendedDate = rs.getString("attendedDate");
 				String created_at = rs.getString("created_at");
-				users.add(new User(id, name, note, attendedDate,created_at));
+				users.add(new Attendance(id, staffId, note, attendedDate,created_at));
 			}
 		} catch (SQLException e) {
 			printSQLException(e);
@@ -113,10 +113,10 @@ public class UserDao {
 		return users;
 	}
 
-	public List<User> selectAllUsers_date(String date) {
+	public List<Attendance> selectAllUsers_date(String date) {
 
 		// using try-with-resources to avoid closing resources (boiler plate code)
-		List<User> users = new ArrayList<>();
+		List<Attendance> users = new ArrayList<>();
 		// Step 1: Establishing a Connection
 		try (Connection connection = getConnection();
 
@@ -129,11 +129,38 @@ public class UserDao {
 			// Step 4: Process the ResultSet object.
 			while (rs.next()) {
 				int id = rs.getInt("id");
-				String name = rs.getString("name");
+				String staffId = rs.getString("staffId");
 				String note = rs.getString("note");
 				String attendedDate = rs.getString("attendedDate");
 				String created_at = rs.getString("created_at");
-				users.add(new User(id, name, note, attendedDate,created_at));
+				users.add(new Attendance(id, staffId, note, attendedDate,created_at));
+			}
+		} catch (SQLException e) {
+			printSQLException(e);
+		}
+		return users;
+	}
+	public List<Attendance> selectAllUsers_user(String uid) {
+
+		// using try-with-resources to avoid closing resources (boiler plate code)
+		List<Attendance> users = new ArrayList<>();
+		// Step 1: Establishing a Connection
+		try (Connection connection = getConnection();
+
+				// Step 2:Create a statement using connection object
+			PreparedStatement preparedStatement = connection.prepareStatement("select * from attendance where staffId='"+uid+"'");) {
+			System.out.println(preparedStatement);
+			// Step 3: Execute the query or update query
+			ResultSet rs = preparedStatement.executeQuery();
+
+			// Step 4: Process the ResultSet object.
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String staffId = rs.getString("staffId");
+				String note = rs.getString("note");
+				String attendedDate = rs.getString("attendedDate");
+				String created_at = rs.getString("created_at");
+				users.add(new Attendance(id, staffId, note, attendedDate,created_at));
 			}
 		} catch (SQLException e) {
 			printSQLException(e);
@@ -151,12 +178,12 @@ public class UserDao {
 		return rowDeleted;
 	}
 
-	public boolean updateUser(User user) throws SQLException {
+	public boolean updateUser(Attendance user) throws SQLException {
 		boolean rowUpdated;
 		try (Connection connection = getConnection();
 				PreparedStatement statement = connection.prepareStatement(UPDATE_USERS_SQL);) {
 			System.out.println("updated USer:"+statement);
-			statement.setString(1, user.getName());
+			statement.setString(1, user.getStaffId());
 			statement.setString(2, user.getNote());
 			statement.setString(3, user.getAttendedDate());
 			statement.setInt(4, user.getId());

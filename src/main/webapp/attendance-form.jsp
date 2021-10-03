@@ -8,6 +8,11 @@
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+
 <style type="text/css">
 body {
 margin:0;
@@ -68,16 +73,16 @@ p {
 		<div class="card">
 			<div class="card-body">
 				<c:if test="${user != null}">
-					<form action="update" method="post">
+					<form id="formStaff" action="update" method="post">
 				</c:if>
 				<c:if test="${user == null}">
-					<form action="insert" method="post">
+					<form id="formStaff"  action="insert" method="post">
 				</c:if>
 
 				<caption>
 					<h2>
 						<c:if test="${user != null}">
-            			Edit User
+            			Edit 
             		</c:if>
 						<c:if test="${user == null}">
             			Add New 
@@ -90,28 +95,41 @@ p {
 				</c:if>
 
 				<fieldset class="form-group">
-					<label>Employee Id</label> <input type="text"
-						value="<c:out value='${user.name}' />" class="form-control"
-						name="name" required="required">
+					<label>Member Id</label> 
+						
+						
+				<c:if test="${user == null}"><input type="text" id="staffId"
+						value="<c:out value='${user.staffId}' />" class="form-control"
+						name="staffId"  >
+
+				</c:if>
+				<c:if test="${user != null}"><input type="text" id="staffId"
+						value="<c:out value='${user.staffId}' />" class="form-control"
+						name="staffId"  readonly>
+
+				</c:if>
+				<div id="msg1"></div>
+						
 				</fieldset>
 
 
 				<fieldset class="form-group">
-					<label>Date<span class="badge bg-primary">${user.attendedDate}</span> </label>
+					<label>Date<span class="badge bg-primary">Old : ${user.attendedDate}</span> </label>
 						
 						
 						
-				<c:if test="${user != null}"> <input type="date"
+				<c:if test="${user != null}"> <input type="date" id="attendedDate"
 						value="<c:out value='${user.attendedDate}' />" class="form-control"
-						name="attendedDate" required>
+						name="attendedDate" >
 
 				</c:if>
-				<c:if test="${user == null}"> <input type="date"
+				<c:if test="${user == null}"> <input type="date" id="attendedDate"
 						value="<c:out  value="<%=new java.util.Date()%>"  />" class="form-control"
-						name="attendedDate" required>
+						name="attendedDate" >
 
 				</c:if>
 						
+				<div id="msg2"></div>
 				</fieldset>
 				
 				
@@ -127,5 +145,32 @@ p {
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript">
+
+	$(document).ready(function(){
+		
+	});
+	
+
+	  $(document).on('submit', '#formStaff', function(event){
+		  if($("#staffId").val()==""){
+			    event.preventDefault();
+			    $('#msg1').text('Please fill this')
+			    $("#msg1").css({"color": "red"});
+			}else if($("#staffId").val().length!==5){
+			    event.preventDefault();
+			    $('#msg1').text('Please enter valid Member ID')
+			    $("#msg1").css({"color": "red"});
+			}else if($("#attendedDate").val()==""){
+		    event.preventDefault();
+		    $('#msg1').text('')
+		    $('#msg2').text('Please fill date')
+		    $("#msg2").css({"color": "red"});
+		    
+		}
+	  })
+	  
+	
+	</script>
 </body>
 </html>

@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.admin.staffmanagement.dao.UserDao;
-import com.admin.staffmanagement.user.User;
+import com.admin.staffmanagement.dao.AttendanceDao;
+import com.admin.staffmanagement.user.Attendance;
 
 
 /**
@@ -22,12 +22,12 @@ import com.admin.staffmanagement.user.User;
  */
 
 @WebServlet("/")
-public class UserServlet extends HttpServlet {
+public class AttendanceServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private UserDao userDAO;
+	private AttendanceDao userDAO;
 	
 	public void init() {
-		userDAO = new UserDao();
+		userDAO = new AttendanceDao();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -62,6 +62,9 @@ public class UserServlet extends HttpServlet {
 			case "/attendance":
 				attendace(request, response);
 				break;
+			case "/user":
+				attendaceUser(request, response);
+				break;
 			default:
 				listUser(request, response);
 				break;
@@ -77,31 +80,42 @@ public class UserServlet extends HttpServlet {
 		String date =request.getParameter("date");
 		
 		
-		List<User> listUser1 = userDAO.selectAllUsers_date(date);
+		List<Attendance> listUser1 = userDAO.selectAllUsers_date(date);
 		request.setAttribute("listUser1", listUser1);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("attendance.jsp");
+		dispatcher.forward(request, response);
+	}
+	private void attendaceUser(HttpServletRequest request, HttpServletResponse response)
+			throws SQLException, IOException, ServletException {
+
+		String uid =request.getParameter("uid");
+		
+		
+		List<Attendance> listUser2 = userDAO.selectAllUsers_user(uid);
+		request.setAttribute("listUser2", listUser2);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("attendance-user.jsp");
 		dispatcher.forward(request, response);
 	}
 
 	private void listUser(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, IOException, ServletException {
-		List<User> listUser = userDAO.selectAllUsers();
+		List<Attendance> listUser = userDAO.selectAllUsers();
 		request.setAttribute("listUser", listUser);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("user-list.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("attendance-list.jsp");
 		dispatcher.forward(request, response);
 	}
 
 	private void showNewForm(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("user-form.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("attendance-form.jsp");
 		dispatcher.forward(request, response);
 	}
 
 	private void showEditForm(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, ServletException, IOException {
 		int id = Integer.parseInt(request.getParameter("id"));
-		User existingUser = userDAO.selectUser(id);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("user-form.jsp");
+		Attendance existingUser = userDAO.selectUser(id);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("attendance-form.jsp");
 		request.setAttribute("user", existingUser);
 		dispatcher.forward(request, response);
 
@@ -109,10 +123,10 @@ public class UserServlet extends HttpServlet {
 
 	private void insertUser(HttpServletRequest request, HttpServletResponse response) 
 			throws SQLException, IOException {
-		String name = request.getParameter("name");
+		String staffId = request.getParameter("staffId");
 		String note = request.getParameter("note");
 		String attendedDate = request.getParameter("attendedDate");
-		User newUser = new User(name, note, attendedDate);
+		Attendance newUser = new Attendance(staffId, note, attendedDate);
 		userDAO.insertUser(newUser);
 		response.sendRedirect("list");
 	}
@@ -120,11 +134,11 @@ public class UserServlet extends HttpServlet {
 	private void updateUser(HttpServletRequest request, HttpServletResponse response) 
 			throws SQLException, IOException {
 		int id = Integer.parseInt(request.getParameter("id"));
-		String name = request.getParameter("name");
+		String staffId = request.getParameter("staffId");
 		String note = request.getParameter("note");
 		String attendedDate = request.getParameter("attendedDate");
 
-		User book = new User(id, name, note, attendedDate);
+		Attendance book = new Attendance(id, staffId, note, attendedDate);
 		userDAO.updateUser(book);
 		response.sendRedirect("list");
 	}
